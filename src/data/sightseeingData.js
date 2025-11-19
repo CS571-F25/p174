@@ -1,0 +1,132 @@
+// Mock data for Hong Kong sightseeing spots
+// Based on information from Hong Kong Tourism Board
+
+export const sightseeingData = [
+  {
+    id: 1,
+    name: "Cheung Chau Island",
+    type: "Island",
+    location: "Outlying Islands",
+    district: "Islands District",
+    description: "A charming fishing island known for its laid-back atmosphere, beautiful beaches, and unique bun festival. Explore narrow alleys, visit temples, and enjoy fresh seafood at waterfront restaurants.",
+    photo: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+    highlights: ["Tung Wan Beach", "Cheung Po Tsai Cave", "Annual Bun Festival", "Fresh seafood"],
+    transport: "Ferry from Central Pier 5",
+    duration: "Full day",
+    bestTime: "Year-round",
+    rating: 4.6
+  },
+  {
+    id: 2,
+    name: "Lamma Island",
+    type: "Island",
+    location: "Outlying Islands",
+    district: "Islands District",
+    description: "Hong Kong's third largest island offering a peaceful escape from the city. Known for its fishing villages, hiking trails, and excellent seafood restaurants. No cars allowed, creating a tranquil atmosphere.",
+    photo: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
+    highlights: ["Yung Shue Wan Village", "Sok Kwu Wan seafood", "Family Trail", "No vehicles"],
+    transport: "Ferry from Central Pier 4",
+    duration: "Full day",
+    bestTime: "Year-round",
+    rating: 4.7
+  },
+  {
+    id: 3,
+    name: "Repulse Bay",
+    type: "Beach",
+    location: "Hong Kong Island",
+    district: "Southern District",
+    description: "One of Hong Kong's most famous beaches with golden sand and calm waters. Surrounded by luxury residential buildings and restaurants, it's a popular spot for both locals and tourists.",
+    photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+    highlights: ["Golden sand beach", "Lifeguard service", "Nearby restaurants", "Shopping"],
+    transport: "Bus 6, 6A, 6X, or 260 from Central",
+    duration: "Half to full day",
+    bestTime: "April to November",
+    rating: 4.4
+  },
+  {
+    id: 4,
+    name: "Big Wave Bay",
+    type: "Beach",
+    location: "Hong Kong Island",
+    district: "Southern District",
+    description: "A popular beach for surfing and water sports, located near the end of Dragon's Back trail. The beach offers good waves and a relaxed atmosphere, with surfboard rentals available.",
+    photo: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&h=600&fit=crop",
+    highlights: ["Surfing opportunities", "Rock carvings", "Beachside cafes", "Water sports"],
+    transport: "Bus 9 from Shau Kei Wan, then walk from Dragon's Back",
+    duration: "Half day",
+    bestTime: "May to October",
+    rating: 4.5
+  },
+  {
+    id: 5,
+    name: "Tai O",
+    type: "Viewpoint",
+    location: "Lantau Island",
+    district: "Islands District",
+    description: "A traditional fishing village known as the 'Venice of Hong Kong' with stilt houses over the water. Experience authentic local culture, sample traditional snacks, and take boat tours to see pink dolphins.",
+    photo: "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=800&h=600&fit=crop",
+    highlights: ["Stilt houses", "Pink dolphin tours", "Traditional markets", "Local food"],
+    transport: "Bus 11 from Tung Chung MTR Station",
+    duration: "Half day",
+    bestTime: "Year-round",
+    rating: 4.6
+  },
+  {
+    id: 6,
+    name: "Sai Kung Peninsula",
+    type: "Viewpoint",
+    location: "New Territories",
+    district: "Sai Kung District",
+    description: "Known as 'Hong Kong's Back Garden', this area features stunning coastal scenery, volcanic rock formations, and pristine beaches. A paradise for outdoor enthusiasts with numerous hiking trails and water activities.",
+    photo: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
+    highlights: ["Geological formations", "Rock pools", "Kayaking", "Seafood restaurants"],
+    transport: "Bus 299X from Sha Tin MTR Station to Sai Kung Town",
+    duration: "Full day",
+    bestTime: "October to April",
+    rating: 4.8
+  },
+  {
+    id: 7,
+    name: "Sharp Peak",
+    type: "Viewpoint",
+    location: "Sai Kung",
+    district: "Sai Kung District",
+    description: "A dramatic pointed peak offering spectacular panoramic views of the Sai Kung coastline. The climb is challenging but rewards with some of Hong Kong's most breathtaking scenery.",
+    photo: "https://images.unsplash.com/photo-1464822759844-d150ad3bebb6?w=800&h=600&fit=crop",
+    highlights: ["360-degree views", "Coastal panoramas", "Photography spot", "Remote location"],
+    transport: "Bus 94 from Sai Kung to Pak Tam Au, then hike",
+    duration: "5-6 hours",
+    bestTime: "November to March",
+    rating: 4.9
+  },
+  {
+    id: 8,
+    name: "Tap Mun (Grass Island)",
+    type: "Island",
+    location: "New Territories",
+    district: "Sai Kung District",
+    description: "A remote island known for its grasslands, fishing culture, and peaceful atmosphere. Perfect for camping, stargazing, and escaping the city. The island offers stunning sunset views and fresh seafood.",
+    photo: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+    highlights: ["Grasslands", "Camping spots", "Fishing village", "Sunset views"],
+    transport: "Ferry from Wong Shek Pier (bus 94 from Sai Kung)",
+    duration: "Full day or overnight",
+    bestTime: "Year-round",
+    rating: 4.7
+  },
+  {
+    id: 9,
+    name: "Peng Chau",
+    type: "Island",
+    location: "Outlying Islands",
+    district: "Islands District",
+    description: "A small, tranquil island perfect for a day trip. Explore its narrow streets, visit the old factory site, enjoy local cafes, and take in the peaceful island atmosphere away from the crowds.",
+    photo: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop",
+    highlights: ["Small island charm", "Local cafes", "Quiet atmosphere", "Finger Hill viewpoint"],
+    transport: "Ferry from Central Pier 6",
+    duration: "Half day",
+    bestTime: "Year-round",
+    rating: 4.5
+  }
+];
+

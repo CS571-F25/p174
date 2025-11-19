@@ -1,0 +1,117 @@
+// Mock data for upcoming outdoor events in Hong Kong
+
+export const eventsData = [
+  {
+    id: 1,
+    name: "Hong Kong Trail Walker 2024",
+    type: "Hiking Event",
+    date: "2024-12-15",
+    location: "MacLehose Trail",
+    description: "Join thousands of hikers in this annual charity trail walk covering the famous MacLehose Trail. Various distances available from 10km to 100km. All proceeds go to environmental conservation.",
+    photo: "https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 5000,
+    currentParticipants: 3200,
+    difficulty: "Various",
+    organizer: "Hong Kong Hiking Association"
+  },
+  {
+    id: 2,
+    name: "Beach Cleanup Day",
+    type: "Community Event",
+    date: "2024-11-20",
+    location: "Repulse Bay Beach",
+    description: "Help keep Hong Kong's beaches clean! Join volunteers for a day of beach cleanup and environmental awareness activities. All equipment provided. Followed by a beach BBQ for all participants.",
+    photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 200,
+    currentParticipants: 145,
+    difficulty: "Easy",
+    organizer: "Hong Kong Environmental Action Group"
+  },
+  {
+    id: 3,
+    name: "Sunrise Photography Workshop",
+    type: "Photography Event",
+    date: "2024-12-01",
+    location: "Sunset Peak",
+    description: "Capture Hong Kong's stunning sunrise from Sunset Peak with professional photography guidance. Learn landscape photography techniques and enjoy breakfast at the summit. All skill levels welcome.",
+    photo: "https://images.unsplash.com/photo-1464822759844-d150ad3bebb6?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 30,
+    currentParticipants: 18,
+    difficulty: "Moderate",
+    organizer: "Hong Kong Photography Club"
+  },
+  {
+    id: 4,
+    name: "Island Hopping Adventure",
+    type: "Island Tour",
+    date: "2024-11-25",
+    location: "Outlying Islands",
+    description: "Explore multiple Hong Kong islands in one day! Visit Cheung Chau, Lamma Island, and Peng Chau. Includes guided tours, lunch, and ferry transport. Perfect for discovering the hidden gems of Hong Kong.",
+    photo: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 50,
+    currentParticipants: 42,
+    difficulty: "Easy",
+    organizer: "Hong Kong Island Tours"
+  },
+  {
+    id: 5,
+    name: "Night Hike: Star Gazing",
+    type: "Hiking Event",
+    date: "2024-11-28",
+    location: "Tai Mo Shan",
+    description: "Experience Hong Kong's night sky from the highest peak. This guided night hike includes astronomy basics, telescope viewing, and hot drinks at the summit. Weather permitting, stargazing will be excellent.",
+    photo: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 40,
+    currentParticipants: 35,
+    difficulty: "Moderate",
+    organizer: "Hong Kong Astronomical Society"
+  },
+  {
+    id: 6,
+    name: "Coastal Kayaking Tour",
+    type: "Water Sports",
+    date: "2024-12-10",
+    location: "Sai Kung",
+    description: "Paddle through Hong Kong's beautiful coastal waters with experienced guides. Explore hidden bays, sea caves, and rock formations. All equipment and safety gear provided. Suitable for beginners.",
+    photo: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 24,
+    currentParticipants: 12,
+    difficulty: "Easy to Moderate",
+    organizer: "Hong Kong Water Sports Center"
+  },
+  {
+    id: 7,
+    name: "Autumn Foliage Walk",
+    type: "Nature Walk",
+    date: "2024-11-30",
+    location: "Tai Po Kau Nature Reserve",
+    description: "Discover Hong Kong's autumn colors in this beautiful nature reserve. Guided walk through diverse forest ecosystems, learning about local flora and fauna. Perfect for families and nature lovers.",
+    photo: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 60,
+    currentParticipants: 38,
+    difficulty: "Easy",
+    organizer: "Hong Kong Nature Conservation Society"
+  },
+  {
+    id: 8,
+    name: "Rock Climbing Introduction",
+    type: "Rock Climbing",
+    date: "2024-12-05",
+    location: "Lion Rock",
+    description: "Learn rock climbing basics with certified instructors. All equipment provided. Suitable for complete beginners. Experience climbing on Hong Kong's iconic Lion Rock with safety as the top priority.",
+    photo: "https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?w=800&h=600&fit=crop",
+    registration: "Open",
+    maxParticipants: 20,
+    currentParticipants: 15,
+    difficulty: "Moderate to Hard",
+    organizer: "Hong Kong Climbing Association"
+  }
+];
+
