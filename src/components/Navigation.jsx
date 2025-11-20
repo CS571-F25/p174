@@ -29,6 +29,9 @@ export default function Navigation() {
             <Nav.Link as={Link} to="/trails" className={isActive('/trails') ? 'active' : ''}>
               Trails
             </Nav.Link>
+            <Nav.Link as={Link} to="/bookmarked" className={isActive('/bookmarked') ? 'active' : ''}>
+              ⭐ Bookmarked
+            </Nav.Link>
             <Nav.Link as={Link} to="/sightseeing" className={isActive('/sightseeing') ? 'active' : ''}>
               Sightseeing
             </Nav.Link>

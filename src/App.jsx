@@ -1,6 +1,7 @@
 import { HashRouter, Route, Routes } from 'react-router'
 import Home from './components/Home.jsx'
 import Trails, { BookmarkProvider } from './components/Trails.jsx'
+import BookmarkedTrails from './components/BookmarkedTrails.jsx'
 import Sightseeing from './components/Sightseeing.jsx'
 import Events from './components/Events.jsx'
 import Blog from './components/Blog.jsx'
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home/>}></Route>
             <Route path="/trails" element={<Trails/>}></Route>
+            <Route path="/bookmarked" element={<BookmarkedTrails/>}></Route>
             <Route path="/sightseeing" element={<Sightseeing/>}></Route>
             <Route path="/events" element={<Events/>}></Route>
             <Route path="/blog" element={<Blog/>}></Route>

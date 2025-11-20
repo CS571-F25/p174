@@ -58,13 +58,20 @@ export default function Trails() {
     }
 
     if (filterSettings.district !== 'all') {
-      filtered = filtered.filter(trail => trail.district === filterSettings.district);
+      filtered = filtered.filter(trail => {
+        // Extract district from location string
+        const location = trail.location || '';
+        return location.includes(filterSettings.district);
+      });
     }
 
     if (filterSettings.maxDuration !== 'all') {
       const maxHours = parseInt(filterSettings.maxDuration);
       filtered = filtered.filter(trail => {
-        const trailHours = parseInt(trail.duration.split('-')[0]);
+        if (!trail.estimated_time_hours || trail.estimated_time_hours === '—') return false;
+        // Parse estimated_time_hours (e.g., "2–2.5" or "1–1.5")
+        const timeStr = trail.estimated_time_hours.split('–')[0].trim();
+        const trailHours = parseFloat(timeStr);
         return trailHours <= maxHours;
       });
     }
@@ -77,7 +84,18 @@ export default function Trails() {
     setShowModal(true);
   };
 
-  const districts = [...new Set(trailsData.map(trail => trail.district))];
+  // Extract districts from location strings
+  const districts = [...new Set(trailsData.map(trail => {
+    const location = trail.location || '';
+    // Extract district name (usually appears after a comma or as part of the location)
+    const parts = location.split(',');
+    if (parts.length > 1) {
+      return parts[parts.length - 1].trim();
+    }
+    // Fallback: try to extract common district names
+    const districtMatch = location.match(/(\w+\s+District|Island|Kowloon)/);
+    return districtMatch ? districtMatch[0] : location;
+  }).filter(Boolean))];
 
   return (
     <Container>
@@ -138,7 +156,7 @@ export default function Trails() {
               <Card className="h-100 shadow-sm">
                 <Card.Img 
                   variant="top" 
-                  src={trail.photo}
+                  src={trail.image}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
                 <Card.Body className="d-flex flex-column">
@@ -157,10 +175,10 @@ export default function Trails() {
                       {trail.difficulty}
                     </Badge>
                     {' '}
-                    <Badge bg="info">{trail.duration}</Badge>
+                    <Badge bg="info">{trail.estimated_time_hours} hrs</Badge>
                     <br />
                     <small className="text-muted">
-                      📍 {trail.location} • 🕐 {trail.distance} • ⛰️ {trail.elevation}
+                      📍 {trail.location} • 🕐 {trail.length_km} km • ⛰️ {trail.elevation_gain_m} m
                     </small>
                   </Card.Text>
                   <Card.Text className="flex-grow-1">{trail.description.substring(0, 120)}...</Card.Text>
@@ -182,37 +200,38 @@ export default function Trails() {
             </Modal.Header>
             <Modal.Body>
               <img 
-                src={selectedTrail.photo} 
+                src={selectedTrail.image} 
                 alt={selectedTrail.name}
                 className="img-fluid rounded mb-3"
               />
               <Row className="mb-3">
                 <Col md={6}>
                   <p><strong>Location:</strong> {selectedTrail.location}</p>
-                  <p><strong>District:</strong> {selectedTrail.district}</p>
+                  {selectedTrail.chinese_name && (
+                    <p><strong>Chinese Name:</strong> {selectedTrail.chinese_name}</p>
+                  )}
                   <p><strong>Difficulty:</strong> 
                     <Badge bg={selectedTrail.difficulty === 'Easy' ? 'success' : selectedTrail.difficulty === 'Moderate' ? 'warning' : 'danger'} className="ms-2">
                       {selectedTrail.difficulty}
                     </Badge>
                   </p>
+                  <p><strong>Route Type:</strong> {selectedTrail.route_type}</p>
                 </Col>
                 <Col md={6}>
-                  <p><strong>Duration:</strong> {selectedTrail.duration}</p>
-                  <p><strong>Distance:</strong> {selectedTrail.distance}</p>
-                  <p><strong>Elevation:</strong> {selectedTrail.elevation}</p>
-                  <p><strong>Rating:</strong> ⭐ {selectedTrail.rating}/5.0</p>
+                  <p><strong>Estimated Time:</strong> {selectedTrail.estimated_time_hours} hours</p>
+                  <p><strong>Length:</strong> {selectedTrail.length_km} km ({selectedTrail.length_miles} miles)</p>
+                  <p><strong>Elevation Gain:</strong> {selectedTrail.elevation_gain_m} m ({selectedTrail.elevation_gain_ft} ft)</p>
+                  <p><strong>Rating:</strong> ⭐ {selectedTrail.rating}/5.0 ({selectedTrail.reviews_count} reviews)</p>
                 </Col>
               </Row>
               <p><strong>Description:</strong></p>
               <p>{selectedTrail.description}</p>
-              <p><strong>Highlights:</strong></p>
+              <p><strong>Top Sights:</strong></p>
               <ul>
-                {selectedTrail.highlights.map((highlight, idx) => (
-                  <li key={idx}>{highlight}</li>
+                {selectedTrail.top_sights.map((sight, idx) => (
+                  <li key={idx}><strong>{sight.name}</strong> - {sight.type}</li>
                 ))}
               </ul>
-              <p><strong>Transport:</strong> {selectedTrail.transport}</p>
-              <p><strong>Best Time to Visit:</strong> {selectedTrail.bestTime}</p>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="warning" onClick={() => toggleBookmark(selectedTrail.id)}>
