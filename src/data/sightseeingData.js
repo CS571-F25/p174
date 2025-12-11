@@ -56,7 +56,7 @@ export const sightseeingData = [
     transport: "Bus 9 from Shau Kei Wan, then walk from Dragon's Back",
     duration: "Half day",
     bestTime: "May to October",
-    rating: 4.5
+    rating: 4.6
   },
   {
     id: 5,
