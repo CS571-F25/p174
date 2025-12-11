@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Button, Form, Modal, Badge, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
@@ -46,10 +46,18 @@ export default function Blog() {
     author: '',
     content: ''
   });
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     savePosts(posts);
   }, [posts]);
+
+  const resetNewPostForm = () => {
+    setNewPost({ author: '', title: '', content: '', photo: '' });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleCreatePost = () => {
     if (!user) {
@@ -72,7 +80,7 @@ export default function Blog() {
       };
       const updatedPosts = [newPostData, ...posts];
       setPosts(updatedPosts);
-      setNewPost({ author: '', title: '', content: '', photo: '' });
+      resetNewPostForm();
       setShowCreateModal(false);
     }
   };
@@ -124,6 +132,21 @@ export default function Blog() {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const handlePhotoUpload = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      setNewPost(prev => ({ ...prev, photo: '' }));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewPost(prev => ({ ...prev, photo: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -247,14 +270,28 @@ export default function Blog() {
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="postPhoto">
-                <Form.Label>Photo URL (optional)</Form.Label>
+                <Form.Label>Upload Photo (optional)</Form.Label>
                 <Form.Control
-                  type="url"
-                  placeholder="https://example.com/photo.jpg"
-                  value={newPost.photo}
-                  onChange={(e) => setNewPost({ ...newPost, photo: e.target.value })}
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handlePhotoUpload}
                 />
+                <Form.Text className="text-muted">
+                  Choose an image from your device to show at the top of your post.
+                </Form.Text>
               </Form.Group>
+              {newPost.photo && (
+                <div className="mb-3">
+                  <div className="small text-muted mb-2">Image preview</div>
+                  <ImageWithFallback
+                    src={newPost.photo}
+                    alt="New post preview"
+                    className="img-fluid rounded"
+                    style={{ maxHeight: '250px', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
             </Form>
           )}
         </Modal.Body>
