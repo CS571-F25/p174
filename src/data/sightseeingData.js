@@ -60,19 +60,6 @@ export const sightseeingData = [
   },
   {
     id: 5,
-    name: "Tai O",
-    type: "Viewpoint",
-    location: "Lantau Island",
-    district: "Islands District",
-    description: "A traditional fishing village known as the 'Venice of Hong Kong' with stilt houses over the water. Experience authentic local culture, sample traditional snacks, and take boat tours to see pink dolphins.",
-    photo: "https://www.discoverhongkong.com/content/dam/dhk/intl/explore/great-outdoors/tai-o-journey-through-a-timeless-fishing-village/tai-o-creek-pedestrian-bridge-960x720-c.jpg",
-    transport: "Bus 11 from Tung Chung MTR Station",
-    duration: "Half day",
-    bestTime: "Year-round",
-    rating: 4.6
-  },
-  {
-    id: 6,
     name: "Sai Kung Peninsula",
     type: "Viewpoint",
     location: "New Territories",
@@ -86,7 +73,7 @@ export const sightseeingData = [
     rating: 4.8
   },
   {
-    id: 7,
+    id: 6,
     name: "Sharp Peak",
     type: "Viewpoint",
     location: "Sai Kung",
@@ -100,7 +87,7 @@ export const sightseeingData = [
     rating: 4.9
   },
   {
-    id: 8,
+    id: 7,
     name: "Tap Mun (Grass Island)",
     type: "Island",
     location: "New Territories",
@@ -114,7 +101,7 @@ export const sightseeingData = [
     rating: 4.7
   },
   {
-    id: 9,
+    id: 8,
     name: "Peng Chau",
     type: "Island",
     location: "Outlying Islands",
