@@ -1,5 +1,6 @@
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
+import ImageWithFallback from './ImageWithFallback';
 
 export default function Home() {
   return (
@@ -7,9 +8,9 @@ export default function Home() {
       <Row className="mb-5">
         <Col>
           <div className="text-center py-5">
-            <h1 className="display-4 mb-3">🌲 Discover Hong Kong Outdoors</h1>
+            <h1 className="display-4 mb-3">🇭🇰 Discover Hong Kong Outdoors</h1>
             <p className="lead">
-              Your comprehensive guide to hiking trails, islands, and outdoor attractions across Hong Kong
+              Your comprehensive guide to hiking trails, outdoor attractions and events across Hong Kong
             </p>
           </div>
         </Col>
@@ -17,10 +18,11 @@ export default function Home() {
 
       <Row className="mb-5">
         <Col md={6} className="mb-4">
-          <Card className="h-100 shadow-sm">
-            <Card.Img 
+            <Card className="h-100 shadow-sm">
+            <ImageWithFallback 
               variant="top" 
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop"
+              src="https://www.cathaypacific.com/content/dam/focal-point/digital-library/global-marketing/hong-kong-hiking/hiking_hero_1700x1133.renditionimage.1700.850.jpg"
+              alt="Hikers exploring Hong Kong trails"
               style={{ height: '200px', objectFit: 'cover' }}
             />
             <Card.Body>
@@ -37,10 +39,11 @@ export default function Home() {
         </Col>
 
         <Col md={6} className="mb-4">
-          <Card className="h-100 shadow-sm">
-            <Card.Img 
+            <Card className="h-100 shadow-sm">
+            <ImageWithFallback 
               variant="top" 
-              src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=400&fit=crop"
+              src="https://www.cathaypacific.com/content/dam/destinations/hong-kong/cityguide-gallery/hiking_mui-wo_900x600.originalimage.jpg"
+              alt="Scenic Mui Wo coastline"
               style={{ height: '200px', objectFit: 'cover' }}
             />
             <Card.Body>
@@ -59,10 +62,11 @@ export default function Home() {
 
       <Row className="mb-5">
         <Col md={6} className="mb-4">
-          <Card className="h-100 shadow-sm">
-            <Card.Img 
+            <Card className="h-100 shadow-sm">
+            <ImageWithFallback 
               variant="top" 
-              src="https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=800&h=400&fit=crop"
+              src="https://www.discoverhongkong.com/eng/what-s-new/events.thumb.800.480.png?ck=1765271403"
+              alt="Hong Kong outdoor events collage"
               style={{ height: '200px', objectFit: 'cover' }}
             />
             <Card.Body>
@@ -79,10 +83,11 @@ export default function Home() {
         </Col>
 
         <Col md={6} className="mb-4">
-          <Card className="h-100 shadow-sm">
-            <Card.Img 
+            <Card className="h-100 shadow-sm">
+            <ImageWithFallback 
               variant="top" 
-              src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=800&h=400&fit=crop"
+              src="https://www.discoverhongkong.com/content/dam/dhk/gohk/images/routes/trail-running/hero-image/trailrunevent_Wide_Medium.jpg"
+              alt="Trail runners in Hong Kong"
               style={{ height: '200px', objectFit: 'cover' }}
             />
             <Card.Body>
@@ -119,18 +124,18 @@ export default function Home() {
       <Row className="mb-5">
         <Col>
           <div className="text-center py-4">
-            <h3 className="mb-3">Features</h3>
+            <h2 className="mb-3">Features</h2>
             <Row>
               <Col md={4} className="mb-3">
-                <h5>🗺️ Filter & Search</h5>
+                <h3>🗺️ Filter & Search</h3>
                 <p>Find trails and attractions based on difficulty, location, duration, and more</p>
               </Col>
               <Col md={4} className="mb-3">
-                <h5>⭐ Bookmark Favorites</h5>
+                <h3>⭐ Bookmark Favorites</h3>
                 <p>Save trails and spots you want to visit for easy access later</p>
               </Col>
               <Col md={4} className="mb-3">
-                <h5>👥 Community</h5>
+                <h3>👥 Community</h3>
                 <p>Share experiences, read reviews, and connect with other outdoor lovers</p>
               </Col>
             </Row>

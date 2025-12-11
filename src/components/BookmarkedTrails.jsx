@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { Container, Row, Col, Card, Button, Modal, Badge } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { trailsData } from '../data/trailsData';
-import { useBookmarks } from './Trails';
+import { useBookmarks } from '../contexts/BookmarkContext';
+import ImageWithFallback from './ImageWithFallback';
 
 export default function BookmarkedTrails() {
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const { bookmarks, toggleBookmark } = useBookmarks();
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   // Filter trails to show only bookmarked ones
-  const bookmarkedTrails = trailsData.filter(trail => bookmarks.includes(trail.id));
+  const bookmarkedTrails = trailsData.filter(trail => isBookmarked('trail', trail.id));
 
   const openTrailDetails = (trail) => {
     setSelectedTrail(trail);
@@ -38,9 +39,10 @@ export default function BookmarkedTrails() {
           bookmarkedTrails.map(trail => (
             <Col md={6} lg={4} key={trail.id} className="mb-4">
               <Card className="h-100 shadow-sm">
-                <Card.Img 
+                <ImageWithFallback 
                   variant="top" 
                   src={trail.image}
+                  alt={trail.name}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
                 <Card.Body className="d-flex flex-column">
@@ -49,7 +51,7 @@ export default function BookmarkedTrails() {
                     <Button
                       variant="warning"
                       size="sm"
-                      onClick={() => toggleBookmark(trail.id)}
+                      onClick={() => toggleBookmark('trail', trail.id)}
                     >
                       ⭐
                     </Button>
@@ -83,7 +85,7 @@ export default function BookmarkedTrails() {
               <Modal.Title>{selectedTrail.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <img 
+              <ImageWithFallback 
                 src={selectedTrail.image} 
                 alt={selectedTrail.name}
                 className="img-fluid rounded mb-3"
@@ -118,7 +120,7 @@ export default function BookmarkedTrails() {
               </ul>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="warning" onClick={() => toggleBookmark(selectedTrail.id)}>
+              <Button variant="warning" onClick={() => toggleBookmark('trail', selectedTrail.id)}>
                 ⭐ Remove from Bookmarks
               </Button>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
@@ -131,4 +133,3 @@ export default function BookmarkedTrails() {
     </Container>
   );
 }
-

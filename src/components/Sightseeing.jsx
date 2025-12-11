@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { Container, Row, Col, Card, Button, Form, Modal, Badge, Tabs, Tab } from 'react-bootstrap';
 import { sightseeingData } from '../data/sightseeingData';
+import { useBookmarks } from '../contexts/BookmarkContext';
+import ImageWithFallback from './ImageWithFallback';
 
 export default function Sightseeing() {
   const [filteredSpots, setFilteredSpots] = useState(sightseeingData);
   const [selectedSpot, setSelectedSpot] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState('all');
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   const handleFilterChange = (type) => {
     setFilter(type);
@@ -88,7 +91,7 @@ export default function Sightseeing() {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <img 
+              <ImageWithFallback 
                 src={selectedSpot.photo} 
                 alt={selectedSpot.name}
                 className="img-fluid rounded mb-3"
@@ -116,6 +119,9 @@ export default function Sightseeing() {
               <p><strong>Transport:</strong> {selectedSpot.transport}</p>
             </Modal.Body>
             <Modal.Footer>
+              <Button variant="warning" onClick={() => toggleBookmark('sightseeing', selectedSpot.id)}>
+                {isBookmarked('sightseeing', selectedSpot.id) ? '⭐ Remove from Bookmarks' : '☆ Add to Bookmarks'}
+              </Button>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
                 Close
               </Button>
@@ -128,6 +134,8 @@ export default function Sightseeing() {
 }
 
 function SightseeingCard({ spot, onViewDetails }) {
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  
   const getTypeIcon = (type) => {
     switch(type) {
       case 'Island': return '🏝️';
@@ -138,17 +146,27 @@ function SightseeingCard({ spot, onViewDetails }) {
   };
 
   return (
-    <Card className="h-100 shadow-sm">
-      <Card.Img 
+      <Card className="h-100 shadow-sm">
+      <ImageWithFallback 
         variant="top" 
         src={spot.photo}
+        alt={spot.name}
         style={{ height: '200px', objectFit: 'cover' }}
       />
       <Card.Body className="d-flex flex-column">
-        <Card.Title>
-          {getTypeIcon(spot.type)} {spot.name}
-          <Badge bg="info" className="ms-2">{spot.type}</Badge>
-        </Card.Title>
+        <div className="d-flex justify-content-between align-items-start mb-2">
+          <Card.Title>
+            {getTypeIcon(spot.type)} {spot.name}
+            <Badge bg="info" className="ms-2">{spot.type}</Badge>
+          </Card.Title>
+          <Button
+            variant={isBookmarked('sightseeing', spot.id) ? 'warning' : 'outline-secondary'}
+            size="sm"
+            onClick={() => toggleBookmark('sightseeing', spot.id)}
+          >
+            {isBookmarked('sightseeing', spot.id) ? '⭐' : '☆'}
+          </Button>
+        </div>
         <Card.Text>
           <small className="text-muted">
             📍 {spot.location} • 🕐 {spot.duration} • ⭐ {spot.rating}
@@ -162,4 +180,3 @@ function SightseeingCard({ spot, onViewDetails }) {
     </Card>
   );
 }
-

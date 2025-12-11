@@ -183,14 +183,14 @@ export default function SafetyTips() {
           <Col>
             <Card className="shadow-sm">
               <Card.Header>
-                <h4 className="mb-0">{section.category}</h4>
+                <h2 className="mb-0">{section.category}</h2>
               </Card.Header>
               <Card.Body>
                 <Accordion>
                   {section.tips.map((tip, tipIdx) => (
                     <Accordion.Item eventKey={`${sectionIdx}-${tipIdx}`} key={tipIdx}>
                       <Accordion.Header>{tip.title}</Accordion.Header>
-                      <Accordion.Body>
+                      <Accordion.Body className="bg-body-secondary text-dark rounded">
                         {tip.content}
                       </Accordion.Body>
                     </Accordion.Item>
@@ -228,4 +228,3 @@ export default function SafetyTips() {
     </Container>
   );
 }
-

@@ -18,7 +18,7 @@ export default function Navigation() {
     <Navbar bg="success" variant="dark" expand="lg" className="mb-4">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          🌲 Discover Hong Kong Outdoors
+          🇭🇰 Discover Hong Kong Outdoors
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -29,14 +29,14 @@ export default function Navigation() {
             <Nav.Link as={Link} to="/trails" className={isActive('/trails') ? 'active' : ''}>
               Trails
             </Nav.Link>
-            <Nav.Link as={Link} to="/bookmarked" className={isActive('/bookmarked') ? 'active' : ''}>
-              ⭐ Bookmarked
-            </Nav.Link>
             <Nav.Link as={Link} to="/sightseeing" className={isActive('/sightseeing') ? 'active' : ''}>
               Sightseeing
             </Nav.Link>
             <Nav.Link as={Link} to="/events" className={isActive('/events') ? 'active' : ''}>
               Events
+            </Nav.Link>
+            <Nav.Link as={Link} to="/bookmarked" className={isActive('/bookmarked') ? 'active' : ''}>
+              ⭐ Bookmarked
             </Nav.Link>
             <Nav.Link as={Link} to="/blog" className={isActive('/blog') ? 'active' : ''}>
               Blog

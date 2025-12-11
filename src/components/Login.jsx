@@ -8,7 +8,6 @@ export default function Login() {
   const [registerForm, setRegisterForm] = useState({ username: '', password: '', confirmPassword: '' });
   const [loginError, setLoginError] = useState('');
   const [registerError, setRegisterError] = useState('');
-  const [registerSuccess, setRegisterSuccess] = useState('');
   const [activeTab, setActiveTab] = useState('login');
   
   const { login, register } = useAuth();
@@ -34,7 +33,6 @@ export default function Login() {
   const handleRegister = (e) => {
     e.preventDefault();
     setRegisterError('');
-    setRegisterSuccess('');
 
     if (!registerForm.username || !registerForm.password || !registerForm.confirmPassword) {
       setRegisterError('Please fill in all fields.');
@@ -53,12 +51,7 @@ export default function Login() {
 
     const result = register(registerForm.username, registerForm.password);
     if (result.success) {
-      setRegisterSuccess('Registration successful! You can now login.');
-      setRegisterForm({ username: '', password: '', confirmPassword: '' });
-      setTimeout(() => {
-        setActiveTab('login');
-        setRegisterSuccess('');
-      }, 2000);
+      navigate('/');
     } else {
       setRegisterError(result.error);
     }
@@ -81,7 +74,6 @@ export default function Login() {
                   setActiveTab(k || 'login');
                   setLoginError('');
                   setRegisterError('');
-                  setRegisterSuccess('');
                 }}
                 className="mb-3"
               >
@@ -92,7 +84,7 @@ export default function Login() {
                         {loginError}
                       </Alert>
                     )}
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3" controlId="loginUsername">
                       <Form.Label>Username</Form.Label>
                       <Form.Control
                         type="text"
@@ -102,7 +94,7 @@ export default function Login() {
                         required
                       />
                     </Form.Group>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3" controlId="loginPassword">
                       <Form.Label>Password</Form.Label>
                       <Form.Control
                         type="password"
@@ -125,12 +117,7 @@ export default function Login() {
                         {registerError}
                       </Alert>
                     )}
-                    {registerSuccess && (
-                      <Alert variant="success" className="mb-3">
-                        {registerSuccess}
-                      </Alert>
-                    )}
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3" controlId="registerUsername">
                       <Form.Label>Username</Form.Label>
                       <Form.Control
                         type="text"
@@ -143,7 +130,7 @@ export default function Login() {
                         Username must be unique.
                       </Form.Text>
                     </Form.Group>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3" controlId="registerPassword">
                       <Form.Label>Password</Form.Label>
                       <Form.Control
                         type="password"
@@ -157,7 +144,7 @@ export default function Login() {
                         Password must be at least 6 characters.
                       </Form.Text>
                     </Form.Group>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3" controlId="registerConfirmPassword">
                       <Form.Label>Confirm Password</Form.Label>
                       <Form.Control
                         type="password"
@@ -180,4 +167,3 @@ export default function Login() {
     </Container>
   );
 }
-

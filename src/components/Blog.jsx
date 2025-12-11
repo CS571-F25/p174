@@ -3,15 +3,30 @@ import { Container, Row, Col, Card, Button, Form, Modal, Badge, Alert } from 're
 import { useNavigate } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
 import { blogPosts as initialBlogPosts, addBlogPost, addComment, likePost } from '../data/blogPosts';
+import ImageWithFallback from './ImageWithFallback';
 
 // Store blog posts in localStorage for persistence
+// Always merge community posts with user-created posts
 const getStoredPosts = () => {
-  const stored = localStorage.getItem('blogPosts');
-  return stored ? JSON.parse(stored) : initialBlogPosts;
+  const stored = localStorage.getItem('userBlogPosts');
+  const userPosts = stored ? JSON.parse(stored) : [];
+  
+  // Get IDs of community posts to avoid duplicates
+  const communityPostIds = new Set(initialBlogPosts.map(post => post.id));
+  
+  // Filter out any user posts that might have conflicting IDs with community posts
+  const validUserPosts = userPosts.filter(post => !communityPostIds.has(post.id));
+  
+  // Merge: community posts first, then user posts
+  return [...initialBlogPosts, ...validUserPosts];
 };
 
 const savePosts = (posts) => {
-  localStorage.setItem('blogPosts', JSON.stringify(posts));
+  // Only save user-created posts to localStorage
+  // Community posts are always loaded from initialBlogPosts
+  const communityPostIds = new Set(initialBlogPosts.map(post => post.id));
+  const userPosts = posts.filter(post => !communityPostIds.has(post.id));
+  localStorage.setItem('userBlogPosts', JSON.stringify(userPosts));
 };
 
 export default function Blog() {
@@ -43,12 +58,14 @@ export default function Blog() {
     }
 
     if (newPost.title && newPost.content) {
+      // Use timestamp-based ID to avoid conflicts across devices
+      const newPostId = Date.now();
       const newPostData = {
         author: user.username, // Use logged-in user's username
         title: newPost.title,
         content: newPost.content,
         photos: newPost.photo ? [newPost.photo] : [], // Store as array
-        id: posts.length + 1,
+        id: newPostId,
         date: new Date().toISOString().split('T')[0],
         likes: 0,
         comments: []
@@ -70,9 +87,11 @@ export default function Blog() {
 
   const handleAddComment = () => {
     if (selectedPost && newComment.author && newComment.content) {
+      // Use timestamp-based ID for comments to avoid conflicts
+      const commentId = Date.now();
       const comment = {
         ...newComment,
-        id: selectedPost.comments.length + 1,
+        id: commentId,
         date: new Date().toISOString().split('T')[0]
       };
       const updatedPosts = posts.map(post => 
@@ -141,9 +160,10 @@ export default function Blog() {
             <Col md={6} lg={4} key={post.id} className="mb-4">
               <Card className="h-100 shadow-sm">
                 {post.photos && post.photos[0] && (
-                  <Card.Img 
+                  <ImageWithFallback 
                     variant="top" 
                     src={post.photos[0]}
+                    alt={post.title}
                     style={{ height: '200px', objectFit: 'cover' }}
                   />
                 )}
@@ -205,7 +225,7 @@ export default function Blog() {
                   Posting as: <strong>{user.username}</strong>
                 </Alert>
               )}
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" controlId="postTitle">
                 <Form.Label>Title</Form.Label>
                 <Form.Control
                   type="text"
@@ -215,7 +235,7 @@ export default function Blog() {
                   required
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" controlId="postContent">
                 <Form.Label>Content</Form.Label>
                 <Form.Control
                   as="textarea"
@@ -226,7 +246,7 @@ export default function Blog() {
                   required
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" controlId="postPhoto">
                 <Form.Label>Photo URL (optional)</Form.Label>
                 <Form.Control
                   type="url"
@@ -264,7 +284,7 @@ export default function Blog() {
                 </small>
               </div>
               {selectedPost.photos && selectedPost.photos[0] && (
-                <img 
+                <ImageWithFallback 
                   src={selectedPost.photos[0]} 
                   alt={selectedPost.title}
                   className="img-fluid rounded mb-3"
@@ -286,7 +306,7 @@ export default function Blog() {
 
               <hr />
 
-              <h5>Comments</h5>
+              <h2>Comments</h2>
               {selectedPost.comments.length === 0 ? (
                 <p className="text-muted">No comments yet. Be the first to comment!</p>
               ) : (
@@ -304,7 +324,7 @@ export default function Blog() {
               <hr />
 
               <Form>
-                <Form.Group className="mb-2">
+                <Form.Group className="mb-2" controlId="commentAuthor">
                   <Form.Label>Your Name</Form.Label>
                   <Form.Control
                     type="text"
@@ -313,7 +333,7 @@ export default function Blog() {
                     onChange={(e) => setNewComment({ ...newComment, author: e.target.value })}
                   />
                 </Form.Group>
-                <Form.Group className="mb-2">
+                <Form.Group className="mb-2" controlId="commentContent">
                   <Form.Label>Comment</Form.Label>
                   <Form.Control
                     as="textarea"
@@ -339,4 +359,3 @@ export default function Blog() {
     </Container>
   );
 }
-

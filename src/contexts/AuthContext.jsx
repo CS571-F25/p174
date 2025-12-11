@@ -52,8 +52,12 @@ export const AuthProvider = ({ children }) => {
     
     users.push(newUser);
     saveUsers(users);
+
+    const userInfo = { username: newUser.username };
+    setUser(userInfo);
+    localStorage.setItem('loggedInUser', JSON.stringify(userInfo));
     
-    return { success: true };
+    return { success: true, user: userInfo };
   };
 
   // Login user
@@ -91,4 +95,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-

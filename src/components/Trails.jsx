@@ -1,34 +1,8 @@
-import { useState, useContext, createContext } from 'react';
+import { useState } from 'react';
 import { Container, Row, Col, Card, Button, Form, Modal, Badge } from 'react-bootstrap';
 import { trailsData } from '../data/trailsData';
-
-// Create context for bookmarks
-const BookmarkContext = createContext();
-
-export const BookmarkProvider = ({ children }) => {
-  const [bookmarks, setBookmarks] = useState(() => {
-    const saved = localStorage.getItem('trailBookmarks');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const toggleBookmark = (trailId) => {
-    setBookmarks(prev => {
-      const newBookmarks = prev.includes(trailId)
-        ? prev.filter(id => id !== trailId)
-        : [...prev, trailId];
-      localStorage.setItem('trailBookmarks', JSON.stringify(newBookmarks));
-      return newBookmarks;
-    });
-  };
-
-  return (
-    <BookmarkContext.Provider value={{ bookmarks, toggleBookmark }}>
-      {children}
-    </BookmarkContext.Provider>
-  );
-};
-
-export const useBookmarks = () => useContext(BookmarkContext);
+import { useBookmarks } from '../contexts/BookmarkContext';
+import ImageWithFallback from './ImageWithFallback';
 
 export default function Trails() {
   const [filteredTrails, setFilteredTrails] = useState(trailsData);
@@ -39,7 +13,7 @@ export default function Trails() {
     district: 'all',
     maxDuration: 'all'
   });
-  const { bookmarks, toggleBookmark } = useBookmarks();
+  const { isBookmarked, toggleBookmark } = useBookmarks();
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -108,7 +82,7 @@ export default function Trails() {
 
       <Row className="mb-4">
         <Col md={4} className="mb-3">
-          <Form.Group>
+          <Form.Group controlId="trailDifficulty">
             <Form.Label>Difficulty</Form.Label>
             <Form.Select name="difficulty" value={filters.difficulty} onChange={handleFilterChange}>
               <option value="all">All Difficulties</option>
@@ -119,7 +93,7 @@ export default function Trails() {
           </Form.Group>
         </Col>
         <Col md={4} className="mb-3">
-          <Form.Group>
+          <Form.Group controlId="trailDistrict">
             <Form.Label>District</Form.Label>
             <Form.Select name="district" value={filters.district} onChange={handleFilterChange}>
               <option value="all">All Districts</option>
@@ -130,7 +104,7 @@ export default function Trails() {
           </Form.Group>
         </Col>
         <Col md={4} className="mb-3">
-          <Form.Group>
+          <Form.Group controlId="trailDuration">
             <Form.Label>Max Duration (hours)</Form.Label>
             <Form.Select name="maxDuration" value={filters.maxDuration} onChange={handleFilterChange}>
               <option value="all">Any Duration</option>
@@ -154,20 +128,21 @@ export default function Trails() {
           filteredTrails.map(trail => (
             <Col md={6} lg={4} key={trail.id} className="mb-4">
               <Card className="h-100 shadow-sm">
-                <Card.Img 
+                <ImageWithFallback 
                   variant="top" 
                   src={trail.image}
+                  alt={trail.name}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
                 <Card.Body className="d-flex flex-column">
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <Card.Title>{trail.name}</Card.Title>
                     <Button
-                      variant={bookmarks.includes(trail.id) ? 'warning' : 'outline-secondary'}
+                      variant={isBookmarked('trail', trail.id) ? 'warning' : 'outline-secondary'}
                       size="sm"
-                      onClick={() => toggleBookmark(trail.id)}
+                      onClick={() => toggleBookmark('trail', trail.id)}
                     >
-                      {bookmarks.includes(trail.id) ? '⭐' : '☆'}
+                      {isBookmarked('trail', trail.id) ? '⭐' : '☆'}
                     </Button>
                   </div>
                   <Card.Text>
@@ -199,7 +174,7 @@ export default function Trails() {
               <Modal.Title>{selectedTrail.name}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <img 
+              <ImageWithFallback 
                 src={selectedTrail.image} 
                 alt={selectedTrail.name}
                 className="img-fluid rounded mb-3"
@@ -234,8 +209,8 @@ export default function Trails() {
               </ul>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="warning" onClick={() => toggleBookmark(selectedTrail.id)}>
-                {bookmarks.includes(selectedTrail.id) ? '⭐ Remove from Bookmarks' : '☆ Add to Bookmarks'}
+              <Button variant="warning" onClick={() => toggleBookmark('trail', selectedTrail.id)}>
+                {isBookmarked('trail', selectedTrail.id) ? '⭐ Remove from Bookmarks' : '☆ Add to Bookmarks'}
               </Button>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
                 Close
@@ -247,4 +222,3 @@ export default function Trails() {
     </Container>
   );
 }
-

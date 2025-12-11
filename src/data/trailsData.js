@@ -107,7 +107,7 @@ export const trailsData = [
     length_km: 3.86,
     elevation_gain_ft: 1292,
     elevation_gain_m: 394,
-    estimated_time_hours: "—",
+    estimated_time_hours: "3–4",
     route_type: "Out & back",
     description: "One of Hong Kong's most iconic hikes, known for its dramatic summit overlooking Kowloon, Hong Kong Island, and the New Territories. The trail features both shaded and exposed sections, with scenic views throughout. Best visited on a clear day to enjoy wide panoramic vistas.",
     top_sights: [
