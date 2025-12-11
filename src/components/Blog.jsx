@@ -29,6 +29,62 @@ const savePosts = (posts) => {
   localStorage.setItem('userBlogPosts', JSON.stringify(userPosts));
 };
 
+const MAX_UPLOAD_FILE_SIZE = 6 * 1024 * 1024; // 6MB raw file limit
+const INLINE_FILE_THRESHOLD = 1.2 * 1024 * 1024; // below this we avoid recompressing
+const MAX_IMAGE_DIMENSION = 1280; // cap the longest edge so base64 fits in storage
+
+const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    if (typeof reader.result === 'string') {
+      resolve(reader.result);
+    } else {
+      reject(new Error('Unsupported file format'));
+    }
+  };
+  reader.onerror = () => reject(new Error('Failed to read file'));
+  reader.readAsDataURL(file);
+});
+
+const processPhotoForStorage = async (file) => {
+  const base64Data = await readFileAsDataUrl(file);
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => {
+      const longestEdge = Math.max(image.width, image.height);
+      const shouldResize = longestEdge > MAX_IMAGE_DIMENSION || file.size > INLINE_FILE_THRESHOLD;
+
+      if (!shouldResize) {
+        resolve(base64Data);
+        return;
+      }
+
+      const scale = Math.min(1, MAX_IMAGE_DIMENSION / longestEdge);
+      const targetWidth = Math.round(image.width * scale);
+      const targetHeight = Math.round(image.height * scale);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      const context = canvas.getContext('2d');
+
+      if (!context) {
+        reject(new Error('Unable to process image'));
+        return;
+      }
+
+      context.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+      const normalizedType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+      const quality = normalizedType === 'image/jpeg' ? 0.82 : undefined;
+
+      resolve(canvas.toDataURL(normalizedType, quality));
+    };
+    image.onerror = () => reject(new Error('Unable to load image preview'));
+    image.src = base64Data;
+  });
+};
+
 export default function Blog() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -46,14 +102,25 @@ export default function Blog() {
     author: '',
     content: ''
   });
+  const [storageError, setStorageError] = useState('');
+  const [photoError, setPhotoError] = useState('');
+  const [photoProcessing, setPhotoProcessing] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    savePosts(posts);
+    try {
+      savePosts(posts);
+      setStorageError('');
+    } catch (error) {
+      console.error('Failed to persist blog posts', error);
+      setStorageError('Unable to save posts locally. Try a smaller image or clear browser storage.');
+    }
   }, [posts]);
 
   const resetNewPostForm = () => {
     setNewPost({ author: '', title: '', content: '', photo: '' });
+    setPhotoError('');
+    setPhotoProcessing(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -62,6 +129,11 @@ export default function Blog() {
   const handleCreatePost = () => {
     if (!user) {
       navigate('/login');
+      return;
+    }
+
+    if (photoProcessing) {
+      setPhotoError('Please wait while we finish processing your image.');
       return;
     }
 
@@ -134,23 +206,59 @@ export default function Blog() {
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
 
-  const handlePhotoUpload = (event) => {
+  const handlePhotoUpload = async (event) => {
     const file = event.target.files?.[0];
+    setPhotoError('');
 
     if (!file) {
       setNewPost(prev => ({ ...prev, photo: '' }));
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setNewPost(prev => ({ ...prev, photo: reader.result }));
-    };
-    reader.readAsDataURL(file);
+    if (!file.type.startsWith('image/')) {
+      setPhotoError('Please select a valid image file.');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_FILE_SIZE) {
+      setPhotoError('Images larger than 6 MB cannot be stored locally. Please choose a smaller file.');
+      setNewPost(prev => ({ ...prev, photo: '' }));
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    try {
+      setPhotoProcessing(true);
+      const processedPhoto = await processPhotoForStorage(file);
+      setNewPost(prev => ({ ...prev, photo: processedPhoto }));
+    } catch (error) {
+      console.error('Failed to process uploaded image', error);
+      setPhotoError('We could not process that image. Try a smaller file or a different format.');
+      setNewPost(prev => ({ ...prev, photo: '' }));
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } finally {
+      setPhotoProcessing(false);
+    }
   };
 
   return (
     <Container>
+      {storageError && (
+        <Row className="mb-3">
+          <Col>
+            <Alert variant="warning" className="mb-0">
+              {storageError}
+            </Alert>
+          </Col>
+        </Row>
+      )}
       <Row className="mb-4">
         <Col>
           <div className="d-flex justify-content-between align-items-center">
@@ -280,6 +388,16 @@ export default function Blog() {
                 <Form.Text className="text-muted">
                   Choose an image from your device to show at the top of your post.
                 </Form.Text>
+                {photoProcessing && (
+                  <Form.Text className="text-info d-block mt-1">
+                    Compressing your photo so it fits in browser storage...
+                  </Form.Text>
+                )}
+                {photoError && (
+                  <Form.Text className="text-danger d-block mt-1">
+                    {photoError}
+                  </Form.Text>
+                )}
               </Form.Group>
               {newPost.photo && (
                 <div className="mb-3">
@@ -300,8 +418,8 @@ export default function Blog() {
             Cancel
           </Button>
           {user && (
-            <Button variant="success" onClick={handleCreatePost}>
-              Publish Post
+            <Button variant="success" onClick={handleCreatePost} disabled={photoProcessing}>
+              {photoProcessing ? 'Processing photo...' : 'Publish Post'}
             </Button>
           )}
         </Modal.Footer>
